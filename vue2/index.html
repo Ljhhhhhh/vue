@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="js/vue.js" type="text/javascript"></script>
+    <title>Vue.js</title>
+    <style>
+        span.active{
+            color: red;
+        }
+        span.big{
+            font-size: 36px;
+        }
+    </style>
+</head>
+<body class="container">
+<div id="mv">
+    <p class="panel">{{message}}</p>
+    <button class="btn btn-success" v-on:click="btn('JLD')">JLD</button>
+    <button class="btn btn-info" v-on:click="btn('GJQ')">GJQ</button>
+    <button class="btn btn-warning" v-on:click="btn('YYW')">YYW</button>
+</div>
+<script>
+    var mv = new Vue({
+        el: '#mv',
+        data: {
+            message: 'LJH'
+        },
+        methods: {
+            btn: function (name) {
+                this.message = name;
+            }
+        }
+    })
+</script>
+<div id="mv2">
+    <ul class="list-group">
+        <li class="list-group-item" v-for="item in items">{{item.title}}</li>
+        <my-item class="list-group-item" v-for="item in items" v-bind:item="item"></my-item>
+        <!--item in items 中的items指向mv2中的data中的items-->
+        <!--v-bind:item="item" 双引号内的item指向items中的item（项目）-->
+    </ul>
+</div>
+<script>
+    Vue.component('my-item', {
+        props: ['item'],
+        template: '<li>{{item.title}}</li>'
+//        {{item.title}}中的item指向了bind绑定得到的item，title指向item里的title
+    })
+    var mv2 = new Vue({
+        el: '#mv2',
+        data: {
+            items: [
+                {title: '项目一'},
+                {title: '项目二'},
+                {title: '项目三'}
+            ]
+        }
+    })
+</script>
+<button class="btn btn-primary" type="button" id="mv3">
+    Messages <span class="badge">{{mes | toupper}}</span>
+</button>
+<script>
+    var mv3 = new Vue({
+        el: '#mv3',
+        data: {
+            mes: 'Hello'
+        },
+        filters: {
+            toupper: function (value) {
+                return value.toUpperCase();
+            }
+        }
+    })
+</script>
+<div id="mv4">
+    <p class="alert-info">{{num}}</p>
+    <button class="btn" @click="add(200)">
+        加价 <span class="badge">200元</span>
+    </button>
+</div>
+<script>
+    var mv4 = new Vue({
+        el: '#mv4',
+        data: {
+            num: 888,
+            numtwo: 0
+        },
+//        computed:{
+//            numTwo:function(){
+//                return this.num+200;
+//            }
+//        }
+        watch: {
+            num: function (newVal, oldVal) {
+                this.numtow = this.num + 200;
+            }
+        },
+        methods: {
+            add: function (val) {
+                this.num += val;
+            }
+        }
+    })
+</script>
+<div id="mv5" class="list-group">
+    <cavs c="汤普森" pf="乐福">
+        <span slot="sf">詹姆斯</span>
+        <span slot="sg">斯密斯</span>
+        <span slot="pg">欧文</span>
+    </cavs>
+</div>
+<script>
+    Vue.component('cavs', {
+        props: ['c', 'pf'],
+        template: '<div>' +
+        '<div class="list-group-item">中锋:{{c}}</div>' +
+        '<div class="list-group-item">中锋:{{pf}}</div>' +
+        '<div class="list-group-item">小前：<slot name="sf"></slot></div>' +
+        '<div class="list-group-item">小前：<slot name="sg"></slot></div>' +
+        '<div class="list-group-item">小前：<slot name="pg"></slot></div>' +
+        '</div>>'
+    })
+    var mv5 = new Vue({
+        el:'#mv5'
+    })
+</script>
+<div id="mv6">
+    <div id="jq">123</div>
+    <span v-bind:class="myClass" class="badge" >hello</span>
+    <button @click="btnsix" class="btn btn-default" >按钮</button>
+</div>
+<script>
+    var mv6=new Vue({
+        el:'#mv6',
+        data:{
+            myClass:{
+                active:true,
+                big:true
+            }
+        },
+        methods:{
+            btnsix:function(){
+                this.myClass.big=!this.myClass.big;
+            }
+        }
+    })
+</script>
+<div id="mv7">
+    <h1 v-show="result">这里是成绩查询</h1>
+    <span class="badge" v-if="score==0">Wait</span>
+    <span class="badge" v-else-if="score<60">{{score}}分Fail</span>
+    <span class="badge" v-else="score>80">{{score}}分Pass</span>
+    <button @click="btn7" class="btn btn-info">查成绩</button>
+    <ul class="list-group">
+        <li class="list-group-item" v-for="(game,index) in games">{{index}}---{{game.title}}{{game.price}}</li>
+    </ul>
+    <ul class="list-group">
+        <li class="list-group-item" v-for="(value,key) in LJH">
+            {{ key }}:{{value}}
+        </li>
+    </ul>
+</div>
+<script>
+    var mv7=new Vue({
+        el:'#mv7',
+        data:{
+            score:0,
+            result:true,
+            games:[
+                {title:"NBA2K17",price:50},
+                {title:"RACE2017",price:60},
+                {title:"GTA",price:80},
+            ],
+            LJH: {
+                name: '卢洁辉',
+                age:23,
+                weight:130,
+                firend:'金丽丹',
+            }
+        },
+        methods:{
+            btn7:function(){
+                this.score=Math.round(Math.random()*100);
+                this.result=!this.result;
+            }
+        }
+    })
+</script>
+<div id="mv8">
+    <span class="badge">{{clickNum}}</span>
+    <button class="btn btn-primary" v-on:click="click()">Click Me</button>
+</div>
+<script>
+    var mv8=new Vue({
+        el:"#mv8",
+        data:{
+            clickNum:0,
+        },
+        methods:{
+            click:function(){
+                this.clickNum++
+            }
+        }
+    })
+</script>
+<div id="mv9">
+    <p>{{mes}}</p>
+    <input type="text" v-model.trim="mes" class="form-control">
+    <label for="">first</label><input type="checkbox" v-model="mes_box" value="first">
+    <label for="">second</label><input type="checkbox" v-model="mes_box" value="second">
+    <label for="">third</label><input type="checkbox" v-model="mes_box" value="third">
+    <p class="badge">You chose the {{mes_box}}</p>
+    <label for="">one</label><input type="radio" v-model="picked" value="one">
+    <label for="">two</label><input type="radio" v-model="picked" value="two">
+    <label for="">three</label><input type="radio" v-model="picked" value="three">
+    <p class="badge">you chose the {{picked}}</p>
+    <select name="" id="" v-model="sss" multiple class="form-control">
+        <option value="01" disabled>01</option>
+        <option value="02">02</option>
+        <option value="03">03</option>
+        <option value="04">04</option>
+        <option value="05">05</option>
+    </select>
+    <p class="alert alert-danger">你选择了：{{sss}}</p>
+</div>
+<script>
+    var mv9=new Vue({
+        el:'#mv9',
+        data:{
+            mes:'hell0 Vue',
+            mes_box:[],
+            picked:'',
+            sss:[],
+        }
+    })
+</script>
+<div class="page-header">
+    <h1>Example page header <small>Subtext for header</small></h1>
+</div>
+</body>
+</html>
